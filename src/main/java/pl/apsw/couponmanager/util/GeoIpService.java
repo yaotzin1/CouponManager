@@ -2,6 +2,7 @@ package pl.apsw.couponmanager.util;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import pl.apsw.couponmanager.util.exception.GeoIpLookupException;
 
 @Service
 public class GeoIpService implements GeoIpClient {
@@ -19,11 +20,11 @@ public class GeoIpService implements GeoIpClient {
                 .retrieve()
                 .body(GeoIpResponse.class);
         if(response == null) {
-            throw new IllegalArgumentException("Failed to retrieve GeoIP data for IP address: " + ipAddress);
+            throw new GeoIpLookupException("Failed to retrieve GeoIP data for IP address: " + ipAddress);
         }
 
         if(!"success".equals(response.status())) {
-            throw new IllegalStateException("Could not resolve country from IP: " + response.message());
+            throw new GeoIpLookupException("Could not resolve country from IP: " + response.message());
         }
 
         return response.countryCode();

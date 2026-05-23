@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import org.springframework.web.client.RestClient;
+import pl.apsw.couponmanager.util.exception.GeoIpLookupException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,8 +56,8 @@ class GeoIpServiceTest {
                         }
                         """, MediaType.APPLICATION_JSON));
 
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
+        GeoIpLookupException exception = assertThrows(
+                GeoIpLookupException.class,
                 () -> geoIpService.getCountryCodeByIp("192.168.1.1")
         );
 
@@ -69,8 +70,8 @@ class GeoIpServiceTest {
         server.expect(once(), requestTo("http://ip-api.com/json/8.8.8.8?fields=status,countryCode,message"))
                 .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        GeoIpLookupException exception = assertThrows(
+                GeoIpLookupException.class,
                 () -> geoIpService.getCountryCodeByIp("8.8.8.8")
         );
 
