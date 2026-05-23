@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: CouponManager
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coupon_manager
+    username: myuser
+    password: secret
+
+coupon-manager:
+  redemption:
+    country-restriction:
+      enabled: true
+
+  integrations:
+    geo-ip:
+      provider: ip-api
+      base-url: http://ip-api.com

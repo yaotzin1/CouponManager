@@ -1,0 +1,61 @@
+# Maven build output
+target/
+*.class
+
+# Logs
+*.log
+logs/
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files / local secrets
+.env
+.env.*
+*.local
+
+# Spring Boot local config overrides
+application-local.yaml
+application-local.yml
+application-local.properties
+
+# Docker local overrides
+compose.override.yaml
+docker-compose.override.yml
+
+# Test reports / generated files
+surefire-reports/
+failsafe-reports/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Keep Maven Wrapper and project files
+!.mvn/wrapper/maven-wrapper.properties
+!mvnw
+!mvnw.cmd
+!pom.xml
+!compose.yaml
