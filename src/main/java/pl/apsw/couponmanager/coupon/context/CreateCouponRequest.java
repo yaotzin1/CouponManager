@@ -8,6 +8,10 @@ import jakarta.validation.constraints.Size;
 public record CreateCouponRequest (
     @NotBlank
     @Size(max = 100)
+    @Pattern(
+            regexp = "^[A-Za-z0-9_-]+$",
+            message = "Coupon code may contain only letters, numbers, hyphens and underscores"
+    )
     String code,
 
     @NotBlank
