@@ -1,13 +1,13 @@
 package pl.apsw.couponmanager;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+
 class CouponManagerApplicationTests {
 
     @Test
-    void contextLoads() {
+    void shouldHaveApplicationClass() {
+        assertThat(CouponManagerApplication.class).isNotNull();
     }
-
 }

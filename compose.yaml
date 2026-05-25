@@ -1,9 +1,15 @@
 services:
   postgres:
-    image: 'postgres:17'
+    image: 'postgres:17-alpine'
+    container_name: coupon-manager-postgres
     environment:
       - 'POSTGRES_DB=coupon_manager'
-      - 'POSTGRES_USER=myuser'
-      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=coupon_manager'
+      - 'POSTGRES_PASSWORD=coupon_manager'
     ports:
       - '5432:5432'
+    volumes:
+      - coupon-manager-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  coupon-manager-postgres-data:

@@ -1,0 +1,57 @@
+### CouponManager GeoIP HTTP test suite
+### Preconditions:
+### 1. PostgreSQL is running and the schema exists.
+### 2. The app is running with country restriction enabled.
+### 3. The application can reach the configured GeoIP provider.
+### 4. Select the `local` or `dev` environment from `http-client.env.json`.
+
+@runId = {{$timestamp}}
+@countryCode = HTTP-COUNTRY-{{runId}}
+
+### Create a country-restricted coupon
+POST {{baseUrl}}/api/v1/coupons
+Content-Type: application/json
+
+{
+  "code": "{{countryCode}}",
+  "targetCountry": "PL",
+  "maxUses": 2
+}
+
+> {% 
+client.test("country-restricted coupon setup returns 201", function() {
+  client.assert(response.status === 201, "Expected HTTP 201");
+});
+%}
+
+### Redeem with a Polish IP address
+POST {{baseUrl}}/api/v1/coupons/{{countryCode}}/use
+Content-Type: application/json
+X-Forwarded-For: 83.1.2.3
+
+{
+  "userId": "geoip-user-pl"
+}
+
+> {% 
+client.test("matching country redemption returns 200", function() {
+  client.assert(response.status === 200, "Expected HTTP 200");
+  client.assert(response.body.message === "Coupon applied successfully", "Expected success message");
+});
+%}
+
+### Reject redemption from a different country
+POST {{baseUrl}}/api/v1/coupons/{{countryCode}}/use
+Content-Type: application/json
+X-Forwarded-For: 8.8.8.8
+
+{
+  "userId": "geoip-user-us"
+}
+
+> {% 
+client.test("country mismatch returns 403", function() {
+  client.assert(response.status === 403, "Expected HTTP 403");
+  client.assert(response.body.code === "COUPON_INVALID_COUNTRY", "Expected invalid country error code");
+});
+%}
