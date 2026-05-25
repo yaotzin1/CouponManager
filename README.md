@@ -166,44 +166,7 @@ These values come from [compose.yaml](/D:/projects/private/CouponManager/compose
 
 ```bash
 docker compose up -d
-```
-
-### Important schema note
-
-The project has Flyway on the classpath, but there are currently no migration files under `src/main/resources/db/migration`. The app also uses `spring.jpa.hibernate.ddl-auto=validate`, so the schema must already exist before startup.
-
-If you want to run the current code as-is, initialize the schema manually:
-
-```sql
-CREATE TABLE coupons (
-    id UUID PRIMARY KEY,
-    code VARCHAR(100) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL,
-    max_uses INTEGER NOT NULL,
-    current_uses INTEGER NOT NULL,
-    target_country VARCHAR(2) NOT NULL,
-    CONSTRAINT uk_coupons_code UNIQUE (code)
-);
-
-CREATE TABLE coupon_usages (
-    id BIGSERIAL PRIMARY KEY,
-    coupon_id UUID NOT NULL,
-    user_id VARCHAR(200) NOT NULL,
-    used_at TIMESTAMPTZ NOT NULL,
-    CONSTRAINT fk_coupon_usages_coupon
-        FOREIGN KEY (coupon_id) REFERENCES coupons (id),
-    CONSTRAINT uk_coupon_usages_coupon_id_user_id
-        UNIQUE (coupon_id, user_id)
-);
-```
-
-Example:
-
-```bash
-docker exec -i coupon-manager-postgres psql -U coupon_manager -d coupon_manager
-```
-
-Then paste the SQL above.
+``` 
 
 ## Running the Application
 
